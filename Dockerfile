@@ -1,17 +1,11 @@
-FROM tomcat:9-jdk8-openjdk-slim
+FROM maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src/ src/
+RUN mvn package -q
 
-# remove default webapps
+FROM tomcat:10.1-jdk17-temurin-jammy
 RUN rm -rf /usr/local/tomcat/webapps/*
-
-WORKDIR /usr/local/tomcat/webapps/ROOT
-
-# copy web content (includes jstl jar in WEB-INF/lib)
-COPY ContentWeb/ .
-
-# copy and compile java source files using tomcat's servlet-api
-COPY src/ /tmp/src/
-RUN mkdir -p WEB-INF/classes && javac -cp "/usr/local/tomcat/lib/servlet-api.jar" -d WEB-INF/classes /tmp/src/*/*.java && rm -rf /tmp/src
-
+COPY --from=build /app/target/jsp-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 EXPOSE 8080
-
 CMD ["catalina.sh", "run"]

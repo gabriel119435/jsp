@@ -1,32 +1,27 @@
 package controller;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import domain.Facade;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 
 @WebServlet("/serv")
 public class Serv extends HttpServlet {
-
-    private static final long serialVersionUID = 1L;
 
     public Serv() {
         super();
     }
 
-    // used when browser tries to access web site
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setAttribute("people", Facade.getAll());
-        request.getRequestDispatcher("Login.jsp").forward(request, response);
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
-    // used when form is send
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String name, sex, car, rocket;
@@ -36,7 +31,7 @@ public class Serv extends HttpServlet {
         rocket = request.getParameter("rocket");
 
         if (name == "" || sex == null) {
-            request.getRequestDispatcher("WEB-INF/Error.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/error.jsp").forward(request, response);
             return;
         }
         sex = Facade.turnSexIntoLetter(sex);
@@ -49,6 +44,6 @@ public class Serv extends HttpServlet {
 
         Facade.addPerson(name, sex, car, rocket);
         request.setAttribute("people", Facade.getAll());
-        request.getRequestDispatcher("Login.jsp").forward(request, response);
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 }

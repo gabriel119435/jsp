@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Facade {
 
-    private static List<Person> falseRepo = new ArrayList<Person>();
+    private static final List<Person> FALSE_REPO = new ArrayList<Person>();
 
     public static String turnSexIntoLetter(String valor) {
         if (valor.equals("woman"))
@@ -16,11 +16,11 @@ public class Facade {
     }
 
     public static void addPerson(String a, String b, String c, String d) {
-        falseRepo.add(new Person(a, b, c, d));
+        FALSE_REPO.add(new Person(a, b, c, d));
     }
 
     public static List<Person> getAll() {
-        return falseRepo;
+        return FALSE_REPO;
     }
 
 }
